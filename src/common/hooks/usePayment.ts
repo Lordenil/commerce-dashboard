@@ -1,16 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback } from "react";
+import type { AppDispatch, RootState } from "../../store";
 import {
   openPaymentModal,
   closePaymentModal,
-  addTransaction,
-  updateTransactionStatus,
-  clearCurrentTransaction,
+  savePaymentData,
+  confirmPayment,
+  paymentComplete,
+  backToPayment,
   type ShippingData,
   type CreditCardData,
 } from "../../store/slices/paymentSlice";
-import type { AppDispatch, RootState } from "../../store";
-import type { Product } from "../../models/Product";
 
 export const usePayment = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,6 +19,10 @@ export const usePayment = () => {
     currentTransaction,
     isPaymentModalOpen,
     selectedProduct,
+    currentStep,
+    shippingData,
+    creditCardData,
+    isProcessing,
   } = useSelector((state: RootState) => state.payment);
 
   const handleOpenPaymentModal = useCallback(
@@ -32,24 +36,23 @@ export const usePayment = () => {
     dispatch(closePaymentModal());
   }, [dispatch]);
 
-  const processPayment = useCallback(
-    (product: Product, shipping: ShippingData, payment: CreditCardData) => {
-      dispatch(addTransaction({ product, shipping, payment }));
-
-      setTimeout(() => {
-        dispatch(
-          updateTransactionStatus({
-            id: `txn_${Date.now()}`,
-            status: "completed",
-          })
-        );
-      }, 2000);
+  const handleSavePaymentData = useCallback(
+    (shipping: ShippingData, payment: CreditCardData) => {
+      dispatch(savePaymentData({ shipping, payment }));
     },
     [dispatch]
   );
 
-  const clearTransaction = useCallback(() => {
-    dispatch(clearCurrentTransaction());
+  const handleBackToPayment = useCallback(() => {
+    dispatch(backToPayment());
+  }, [dispatch]);
+
+  const handleConfirmPayment = useCallback(() => {
+    dispatch(confirmPayment());
+
+    setTimeout(() => {
+      dispatch(paymentComplete({ status: "completed" }));
+    }, 2000);
   }, [dispatch]);
 
   return {
@@ -57,9 +60,14 @@ export const usePayment = () => {
     currentTransaction,
     isPaymentModalOpen,
     selectedProduct,
+    currentStep,
+    shippingData,
+    creditCardData,
+    isProcessing,
     openPaymentModal: handleOpenPaymentModal,
     closePaymentModal: handleClosePaymentModal,
-    processPayment,
-    clearTransaction,
+    savePaymentData: handleSavePaymentData,
+    backToPayment: handleBackToPayment,
+    confirmPayment: handleConfirmPayment,
   };
 };

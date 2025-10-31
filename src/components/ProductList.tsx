@@ -9,7 +9,6 @@ export const ProductList = () => {
     selectedProduct,
     openPaymentModal,
     closePaymentModal,
-    processPayment,
   } = usePayment();
 
   const handleBuyProduct = (product: any) => {
@@ -52,7 +51,6 @@ export const ProductList = () => {
         isOpen={isPaymentModalOpen}
         onClose={closePaymentModal}
         product={selectedProduct}
-        onProcessPayment={processPayment}
       />
     </>
   );

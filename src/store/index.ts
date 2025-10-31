@@ -18,7 +18,6 @@ const productPersistConfig = {
 const paymentPersistConfig = {
   key: "payment",
   storage,
-  // Solo persistir datos sensibles de pagos
   whitelist: ["transactions"],
 };
 
