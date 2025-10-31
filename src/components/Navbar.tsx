@@ -9,7 +9,12 @@ export default function Navbar() {
 
   return (
     <nav className="flex justify-between items-center px-6 py-4 bg-gray-100 dark:bg-gray-800 shadow-md">
-      <h1 className="text-xl font-bold dark:text-white">🛍️ Commerce App</h1>
+      <img
+        src="/logo-primary.svg"
+        alt="Wompi Logo"
+        className="w-32 h-8 object-contain dark:invert dark:brightness-0 dark:hue-rotate-180"
+      />
+      <h1 className="text-xl font-bold dark:text-white">Commerce App</h1>
 
       <button
         onClick={() => dispatch(toggleTheme())}
