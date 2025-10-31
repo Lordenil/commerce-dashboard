@@ -1,4 +1,3 @@
-// models/Payment.ts
 export interface ShippingData {
   fullName: string;
   address: string;
