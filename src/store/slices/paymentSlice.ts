@@ -1,5 +1,11 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import type { Product } from "../../models/Product";
+import { CustomerService } from "../../services/customerService";
+import { createTransactionThunk } from "../thunks/transaction.thunks";
 
 export type PaymentStep = "payment" | "summary" | "status";
 
@@ -17,6 +23,7 @@ export interface PaymentTransaction {
 
 export interface ShippingData {
   fullName: string;
+  email: string;
   address: string;
   city: string;
   postalCode: string;
@@ -40,6 +47,10 @@ interface PaymentState {
   shippingData: ShippingData | null;
   creditCardData: CreditCardData | null;
   isProcessing: boolean;
+  customerId: string | null;
+  isCreatingCustomer: boolean;
+  customerError: string | null;
+  transactionError: string | null;
 }
 
 const initialState: PaymentState = {
@@ -51,7 +62,32 @@ const initialState: PaymentState = {
   shippingData: null,
   creditCardData: null,
   isProcessing: false,
+  customerId: null,
+  isCreatingCustomer: false,
+  customerError: null,
+  transactionError: null,
 };
+
+interface CreateCustomerPayload {
+  shippingData: ShippingData;
+}
+
+export const createCustomer = createAsyncThunk(
+  "customer/createCustomer",
+  async (payload: CreateCustomerPayload, { rejectWithValue }) => {
+    try {
+      const customerData = {
+        name: payload.shippingData.fullName,
+        email: payload.shippingData.email,
+      };
+
+      const customer = await CustomerService.createCustomer(customerData);
+      return customer;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data ?? "Error creating customer");
+    }
+  }
+);
 
 const paymentSlice = createSlice({
   name: "payment",
@@ -83,30 +119,12 @@ const paymentSlice = createSlice({
     ) => {
       state.shippingData = action.payload.shipping;
       state.creditCardData = action.payload.payment;
-      state.currentStep = "summary";
     },
     backToPayment: (state) => {
       state.currentStep = "payment";
     },
     confirmPayment: (state) => {
-      if (state.selectedProduct && state.shippingData && state.creditCardData) {
-        state.isProcessing = true;
-
-        const newTransaction: PaymentTransaction = {
-          id: `txn_${Date.now()}`,
-          productId: state.selectedProduct.id,
-          productName: state.selectedProduct.name,
-          amount: state.selectedProduct.price,
-          currency: "USD",
-          status: "pending",
-          timestamp: new Date().toISOString(),
-          customerEmail: "customer@example.com",
-          shippingData: state.shippingData,
-        };
-
-        state.transactions.push(newTransaction);
-        state.currentTransaction = newTransaction;
-      }
+      state.isProcessing = true;
     },
     paymentComplete: (
       state,
@@ -181,6 +199,60 @@ const paymentSlice = createSlice({
     clearCurrentTransaction: (state) => {
       state.currentTransaction = null;
     },
+    preparePaymentData: (
+      state,
+      action: PayloadAction<{
+        shipping: ShippingData;
+        payment: CreditCardData;
+      }>
+    ) => {
+      state.shippingData = action.payload.shipping;
+      state.creditCardData = action.payload.payment;
+    },
+    setCustomerId: (state, action: PayloadAction<string>) => {
+      state.customerId = action.payload;
+    },
+    clearCustomerError: (state) => {
+      state.customerError = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createCustomer.pending, (state) => {
+        state.isCreatingCustomer = true;
+        state.customerError = null;
+      })
+      .addCase(createCustomer.fulfilled, (state, action) => {
+        state.isCreatingCustomer = false;
+        state.customerId = action.payload.id;
+        state.currentStep = "summary";
+      })
+      .addCase(createCustomer.rejected, (state, action) => {
+        state.isCreatingCustomer = false;
+        state.customerError = action.payload as string;
+      })
+      .addCase(createTransactionThunk.pending, (state) => {
+        state.isProcessing = true;
+        state.transactionError = null;
+      })
+      .addCase(createTransactionThunk.fulfilled, (state, action) => {
+        state.isProcessing = false;
+
+        if (state.currentTransaction) {
+          state.currentTransaction.id = action.payload.id;
+          state.currentTransaction.status = action.payload.status;
+        }
+
+        state.currentStep = "status";
+      })
+      .addCase(createTransactionThunk.rejected, (state, action) => {
+        state.isProcessing = false;
+        state.transactionError = action.payload as string;
+
+        if (state.currentTransaction) {
+          state.currentTransaction.status = "failed";
+        }
+      });
   },
 });
 
@@ -196,5 +268,8 @@ export const {
   addTransaction,
   updateTransactionStatus,
   clearCurrentTransaction,
+  preparePaymentData,
+  setCustomerId,
+  clearCustomerError,
 } = paymentSlice.actions;
 export default paymentSlice.reducer;
