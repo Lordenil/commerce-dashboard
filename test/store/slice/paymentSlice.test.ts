@@ -53,7 +53,6 @@ describe("paymentSlice", () => {
     vi.clearAllMocks();
   });
 
-  // ✅ Reducers sincrónicos
   it("should open payment modal", () => {
     const product = { id: "p1", name: "Producto", price: 1000 };
     const state = paymentReducer(initialState, openPaymentModal(product));
@@ -194,7 +193,6 @@ describe("paymentSlice", () => {
     expect(state.customerError).toBeNull();
   });
 
-  // ✅ Thunk: createCustomer
   it("should handle createCustomer.pending", () => {
     const state = paymentReducer(initialState, {
       type: createCustomer.pending.type,
@@ -222,7 +220,6 @@ describe("paymentSlice", () => {
     expect(state.customerError).toBe("Error creating customer");
   });
 
-  // ✅ Thunk: createTransactionThunk
   it("should handle createTransactionThunk.pending", () => {
     const state = paymentReducer(initialState, {
       type: createTransactionThunk.pending.type,
