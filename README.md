@@ -9,6 +9,7 @@ Esta aplicación se integra con un backend RSA para la gestión de productos, cl
 ⚡ Vite – entorno de desarrollo rápido con soporte TypeScript.
 💅 CSS Grid / Flexbox – para el diseño responsive y adaptable.
 🧱 TypeScript – tipado estático y robustez en el código.
+URL productiva: http://52.91.53.76:5173/products
 
 # React + TypeScript + Vite
 

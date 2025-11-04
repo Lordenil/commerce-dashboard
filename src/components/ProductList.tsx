@@ -31,7 +31,7 @@ export const ProductList = () => {
           <div>
             <div className="font-medium dark:text-white">{product.name}</div>
             <p className=" dark:text-white">
-              descripcion del producto: {product.name}
+              descripcion del producto: {product.description}
             </p>
             <p className="text-sm dark:text-white text-gray-500">
               Cantidad: {product.stock}

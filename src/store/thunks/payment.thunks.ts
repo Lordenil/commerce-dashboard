@@ -9,7 +9,7 @@ interface SavePaymentDataPayload {
 
 export const savePaymentDataWithCustomerThunk = createAsyncThunk(
   "payment/savePaymentDataWithCustomer",
-  async (payload: SavePaymentDataPayload, { dispatch }) => {
+  async (payload: SavePaymentDataPayload, { dispatch, rejectWithValue }) => {
     try {
       const customerResult = await dispatch(
         createCustomerThunk({
@@ -22,8 +22,8 @@ export const savePaymentDataWithCustomerThunk = createAsyncThunk(
         shipping: payload.shipping,
         payment: payload.payment,
       };
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data ?? "Error creating customer");
     }
   }
 );
