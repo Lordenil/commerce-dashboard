@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { PaymentForm } from "../../src/components/PaymentForm"; // Ajusta la ruta según tu estructura
+import { PaymentForm } from "../../src/components/PaymentForm";
 import { Product } from "../../src/models/Product";
 
 describe("PaymentForm Component", () => {

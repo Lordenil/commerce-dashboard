@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import { ProductsPage } from "./pages/ProductsPage";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./config/queryClient";
+import { ToastContainer } from "react-toastify";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
           <Route path="/" element={<Navigate to="/products" replace />} />
           <Route path="/products" element={<ProductsPage />} />
         </Routes>
+        <ToastContainer />
       </QueryClientProvider>
     </div>
   );
