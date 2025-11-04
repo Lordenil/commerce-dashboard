@@ -18,6 +18,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 }) => {
   const [shippingData, setShippingData] = useState<ShippingData>({
     fullName: "",
+    email: "",
     address: "",
     city: "",
     postalCode: "",
@@ -76,6 +77,14 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               value={shippingData.phone}
               onChange={(e) => handleShippingChange("phone", e.target.value)}
               className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={shippingData.email}
+              onChange={(e) => handleShippingChange("email", e.target.value)}
+              className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               required
             />
             <input
