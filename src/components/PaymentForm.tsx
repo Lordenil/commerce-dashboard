@@ -23,6 +23,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
     city: "",
     postalCode: "",
     country: "",
+    region: "",
     phone: "",
   });
 
@@ -97,6 +98,22 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
             />
             <input
               type="text"
+              placeholder="País"
+              value={shippingData.country}
+              onChange={(e) => handleShippingChange("country", e.target.value)}
+              className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Región"
+              value={shippingData.region}
+              onChange={(e) => handleShippingChange("region", e.target.value)}
+              className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              required
+            />
+            <input
+              type="text"
               placeholder="Ciudad"
               value={shippingData.city}
               onChange={(e) => handleShippingChange("city", e.target.value)}
@@ -110,14 +127,6 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               onChange={(e) =>
                 handleShippingChange("postalCode", e.target.value)
               }
-              className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              required
-            />
-            <input
-              type="text"
-              placeholder="País"
-              value={shippingData.country}
-              onChange={(e) => handleShippingChange("country", e.target.value)}
               className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               required
             />
@@ -136,7 +145,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                 handlePaymentChange("cardNumber", e.target.value)
               }
               className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 md:col-span-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              maxLength={19}
+              maxLength={16}
               required
             />
             <input

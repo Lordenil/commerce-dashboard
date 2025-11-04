@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { PaymentModal } from "../../src/components/PaymentModal"; // Ajusta la ruta
+import { PaymentModal } from "../../src/components/PaymentModal";
 import { usePayment } from "../../src/common";
 import { Product } from "../../src/models/Product";
 

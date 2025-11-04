@@ -4,6 +4,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import productReducer from "./slices/productSlice";
 import paymentReducer from "./slices/paymentSlice";
+import { toastMiddleware } from "../common/toast/toastMiddleware";
 
 const themeReducerPersistConfig = {
   key: "theme",
@@ -32,7 +33,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
-    }),
+    }).concat(toastMiddleware),
 });
 
 export const persistor = persistStore(store);

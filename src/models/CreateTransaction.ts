@@ -3,6 +3,7 @@ export interface CreateTransaction {
   productId: string;
   amount: number;
   currency: string;
+  type: string;
   numberCard: string;
   expYear: string;
   expMonth: string;
