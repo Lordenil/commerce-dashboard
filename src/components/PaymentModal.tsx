@@ -15,7 +15,13 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   onClose,
   product,
 }) => {
-  const { currentStep, closePaymentModal, savePaymentData } = usePayment();
+  const {
+    currentStep,
+    closePaymentModal,
+    savePaymentData,
+    shippingData,
+    creditCardData,
+  } = usePayment();
 
   const renderCurrentStep = () => {
     switch (currentStep) {
@@ -25,6 +31,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             onClose={closePaymentModal}
             product={product}
             onSavePaymentData={savePaymentData}
+            shippingSavedData={shippingData}
+            creditCardSavedData={creditCardData}
           />
         );
       case "summary":
