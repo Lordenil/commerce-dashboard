@@ -33,9 +33,14 @@ export const ProductList = () => {
             <p className=" dark:text-white">
               descripcion del producto: {product.description}
             </p>
-            <p className="text-sm dark:text-white text-gray-500">
-              Cantidad: {product.stock}
-            </p>
+            <div className="flex justify-between">
+              <p className="text-sm dark:text-white text-gray-500">
+                Precio: <b>${product.price}</b>
+              </p>
+              <p className="text-sm dark:text-white text-gray-500">
+                Cantidad: <b>{product.stock}</b>
+              </p>
+            </div>
           </div>
           <div className="mt-auto">
             <button
