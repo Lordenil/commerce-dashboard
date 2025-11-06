@@ -1,10 +1,12 @@
-export interface ShippingData {
+interface ShippingData {
   fullName: string;
+  phone: string;
+  email: string;
   address: string;
+  country: string;
+  region: string;
   city: string;
   postalCode: string;
-  country: string;
-  phone: string;
 }
 
 export interface CreditCardData {
